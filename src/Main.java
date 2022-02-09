@@ -43,7 +43,7 @@ public class Main {
                 case 7://Metodo JZ
                     //System.out.println("Instruccion:"+i+" es de tipo JZ");
                     //System.out.println(obtenerUnicoArgumentoDadoDosElementos(instruccines[i-1]));
-                    i++;
+                    i = metodoJZ(obtenerUnicoElemento (instrucciones[i-1]), array);
                     break;
                 case 8://Metodo NOP
                     //System.out.println("Instruccion:"+i+" es de tipo NOP");
@@ -201,5 +201,16 @@ public class Main {
 
     public static int metodoJMP(String item) {
            return obtenerUnicoElemento(item);
+    }
+    
+    public static Integer metodoJZ(Integer posicion, int[] registros) {
+        Integer index = 0;
+        if (registros[0]==0) {
+            index = posicion;
+            System.out.println("está iterando!");
+        } else {
+            index++;
+        }
+        return index;
     }
 }
