@@ -5,12 +5,14 @@ public class Main {
     }
 
     public static void procesarInstrucciones(String[] instruccines){
+        int[] array = new int[43];
         int i=1;
         while(i<=instruccines.length){
             switch (identificarComando(instruccines,i-1)){
                 case 1://Metodo MOV
                     //System.out.println("Instruccion:"+i+" es de tipo MOV");
                     //obtenerSegundoArgumentoDeTresElementos(instruccines[0]);
+                    metodoMOV(instrucciones[i-1], array)
                     i++;
                     break;
                 case 2://Metodo ADD
@@ -125,6 +127,41 @@ public class Main {
         int indexInicial = instruccionCompleta.indexOf(',');
         int indexFinal = instruccionCompleta.indexOf('R');
         return Integer.parseInt(instruccionCompleta.substring(indexInicial + 1,indexFinal));
+    }
+    
+    
+    // Obtiene el primer elemento
+    public static String obtenerPrimerElemento (String item) {
+        int indexInicial = item.indexOf(' ');
+        int indexFinal = item.indexOf(',');
+
+        return item.substring(++indexInicial, indexFinal);
+    }
+    public static String obtenerSegundoElemento (String item) {
+        int indexInicial = item.indexOf(',');
+
+        return item.substring(++indexInicial);
+    }
+
+    public static int posicionArray (String argumento) {
+        String posicionSinR = argumento.substring(1);
+        return Integer.parseInt(posicionSinR);
+    }
+
+    public static void metodoMOV(String item, int[] array) {
+        String arg1 = obtenerPrimerElemento(item);
+        String arg2 = obtenerSegundoElemento(item);
+        int posicionArg1;
+        int posicionArg2 = posicionArray(arg2);
+
+        if (arg1.startsWith("R")) {
+            posicionArg1 = posicionArray(arg1);
+            array[posicionArg2] = array[posicionArg1];
+
+        } else {
+            int argDecimal = Integer.parseInt(arg1);
+            array[posicionArg2] = argDecimal;
+        }
     }
 
 
