@@ -55,6 +55,7 @@ public class Main {
                     i++;
                     break;
                 case 4://Metodo INC
+                    metodoINC(ProcesoStringToIntDadoDosElementos(instrucciones[i-1]),array);
                     i++;
                     break;
                 case 5://Metodo INV FINALIZADO: FEDERICO
