@@ -1,52 +1,63 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-            String[] subrutina = {"MOV 5,R00", "MOV 10,R01", "JZ 7", "ADD R02,R01", "DEC R00", "JMP 3", "MOV R02,R42"};
-        procesarInstrucciones(subrutina);
+        Scanner keyScanner = new Scanner(System.in);
+        String[] subrutina;
+        ArrayList<String> ar = new ArrayList<String>();
+        while(true){
+            System.out.print("$Usuario> ");
+
+            String instruccion = keyScanner.nextLine();
+            subrutina.push(instruccion);
+            if(subrutina.length()>1024){
+                System.out.print("Ha excedido la cantidad de comandos permitdos.");
+                break;
+            }
+            else{
+                procesarInstrucciones(subrutina);
+            }
+        }
+            //String[] subrutina = {"MOV 5,R00", "MOV 10,R01", "JZ 7", "ADD R02,R01", "DEC R00", "JMP 3", "MOV R02,R42"};
+            //String[] subrutina = {"NOP","MOV 45,R42", "DEC R42", "INV R42", ""};
+            //procesarInstrucciones(subrutina);
     }
 
+    /**
+     *
+     * @param instrucciones
+     */
     public static void procesarInstrucciones(String[] instrucciones){
         int[] array = new int[43];
         int i=1;
         while(i<=instrucciones.length){
             switch (identificarComando(instrucciones,i-1)){
                 case 1://Metodo MOV
-                    //System.out.println("Instruccion:"+i+" es de tipo MOV");
-                    //obtenerSegundoArgumentoDeTresElementos(instruccines[0]);
                     metodoMOV(instrucciones[i-1], array);
                     i++;
                     break;
                 case 2://Metodo ADD
-                    //System.out.println("Instruccion:"+i+" es de tipo ADD");
                     metodoADD(instrucciones[i-1], array);
                     i++;
                     break;
                 case 3://Metodo DEC FINALIZADO: FEDERICO
-                    //System.out.println("Instruccion:"+i+" es de tipo DEC");
-                    //System.out.println(ProcesoStringToIntDadoDosElementos(instrucciones[i-1]));
                     metodoDEC(ProcesoStringToIntDadoDosElementos(instrucciones[i-1]),array);
                     i++;
                     break;
                 case 4://Metodo INC
-                   // System.out.println("Instruccion:"+i+" es de tipo INC");
                     i++;
                     break;
                 case 5://Metodo INV FINALIZADO: FEDERICO
-                    //System.out.println("Instruccion:"+i+" es de tipo INV");
                     metodoINV(ProcesoStringToIntDadoDosElementos(instrucciones[i-1]),array);
                     i++;
                     break;
                 case 6://Metodo JMP
-                    //System.out.println("Instruccion:"+i+" es de tipo JMP");
-                    //System.out.println(obtenerUnicoArgumentoDadoDosElementos(instruccines[i-1]));
                     i = metodoJMP(instrucciones[i-1]);
                     break;
                 case 7://Metodo JZ
-                    //System.out.println("Instruccion:"+i+" es de tipo JZ");
-                    //System.out.println(obtenerUnicoArgumentoDadoDosElementos(instruccines[i-1]));
-                    i = metodoJZ(obtenerUnicoElemento (instrucciones[i-1]), array);
+                    i = metodoJZ(obtenerUnicoElemento (instrucciones[i-1]), array,i);
                     break;
                 case 8://Metodo NOP
-                    //System.out.println("Instruccion:"+i+" es de tipo NOP");
                     i++;
                     break;
                  default://La instrucción no contiene ninguna instrucción Válida
@@ -56,6 +67,12 @@ public class Main {
         System.out.print(array[42]);
     }
 
+    /**
+     * Método que identifica el comando dada su posición en el arreglo de Strings
+     * @param subrutina Cadena de texto que representa la instrucción
+     * @param indiceDeInstrucciones posicion de la instrucción dada
+     * @return valor numérico que representa la instrucción
+     */
     public static int identificarComando(String[] subrutina, int indiceDeInstrucciones){
         //MOV return 1
         //ADD return 2
@@ -92,70 +109,66 @@ public class Main {
         return 0;
     }
 
-    //Obtiene segundo argumento de MOV,ADD,ETC
-    public static int obtenerSegundoArgumentoDeTresElementos(String instruccionCompleta){
-        int indexInicial = instruccionCompleta.indexOf(' ');
-        int indexFinal = instruccionCompleta.indexOf(',');
-        //System.out.println(instruccionCompleta.substring(indexInicial+1, indexFinal));
-
-        return Integer.parseInt(instruccionCompleta.substring(indexInicial+1, indexFinal));
-    }
-
-    //Obtiene tercer argumento de MOV,ADD,ETC
-    public static int obtenerTercerArgumentoDeTresElementos(String instruccionCompleta){
-        int indexInicial = instruccionCompleta.indexOf(' ');
-        int indexFinal = instruccionCompleta.indexOf(',');
-        //System.out.println(instruccionCompleta.substring(indexInicial+1, indexFinal));
-
-        return Integer.parseInt(instruccionCompleta.substring(indexInicial+1, indexFinal));
-    }
-
-    //Obtiene segundo argumento de JZ,JMP -->> Este metodo está modificado(obtenerUnicoElemento)
-    public static int obtenerUnicoArgumentoDadoDosElementos(String instruccionCompleta){
-        if(instruccionCompleta.contains("JZ") || instruccionCompleta.contains("JMP")) {
-            int indexInicial = instruccionCompleta.indexOf(' ');
-            return Integer.parseInt(instruccionCompleta.substring(indexInicial + 1));
-        }else if(instruccionCompleta.contains("DEC")){
-            //METODO PARA CONVERTIR RXX en X
-        }
-        return 0;
-    }
-
-    //Convertir proceso de tipo String a int (DEC,INC,INV)
+    /**
+     * Extrae el valor numerico dado un String de registro
+     * @param instruccionCompleta Cadena de texto correspondiente a una instrucción
+     * @return valor numérico del argumento
+     */
     public static int ProcesoStringToIntDadoDosElementos(String instruccionCompleta){
         int indexInicial = instruccionCompleta.indexOf('R');
         return Integer.parseInt(instruccionCompleta.substring(indexInicial + 1));
     }
 
-    public static int ProcesoStringToIntDadoTresElementos(String instruccionCompleta){
-        int indexInicial = instruccionCompleta.indexOf(',');
-        int indexFinal = instruccionCompleta.indexOf('R');
-        return Integer.parseInt(instruccionCompleta.substring(indexInicial + 1,indexFinal));
-    }
-    
-    
-    // Obtiene el primer elemento
+
+    /**
+     * Metodo para obtener el primer argumento de la instruccion actual
+     * @param item instruccion actual -> elemento del array
+     * @return retorna un argumento uno del string cortado
+     */
     public static String obtenerPrimerElemento (String item) {
         int indexInicial = item.indexOf(' ');
         int indexFinal = item.indexOf(',');
 
         return item.substring(++indexInicial, indexFinal);
     }
+
+    /**
+     * Metodo para obtener el segundo argumento de la instruccion actual
+     * @param item instruccion actual -> elemento del array
+     * @return retorna un argumento dos del string cortado
+     */
     public static String obtenerSegundoElemento (String item) {
         int indexInicial = item.indexOf(',');
 
         return item.substring(++indexInicial);
     }
+
+    /**
+     * Metodo para obtener el argumento de la instruccion actual
+     * @param item instruccion actual -> elemento del array
+     * @return retorna el argumento como entero del string cortado
+     */
     public static int obtenerUnicoElemento (String item) {
             int index = item.indexOf(' ');
             return Integer.parseInt(item.substring(++index));
     }
 
+    /**
+     * Extrae el valor numerico dado un String de registro
+     * @param argumento Cadena de carácteres correspondiente a una instrucción dada
+     * @return retorna el valor numérico del registro
+     */
     public static int posicionArray (String argumento) {
         String posicionSinR = argumento.substring(1);
         return Integer.parseInt(posicionSinR);
     }
 
+    /**
+     * Método que si el argumento 1 es un decimal, lo agrega a la posicion que designa el argumento2
+     * Si el argumento 1 es posicion, lo copia a la posicion del argumento2
+     * @param item Instrccion actual
+     * @param array Array de registros
+     */
     public static void metodoMOV(String item, int[] array) {
         String arg1 = obtenerPrimerElemento(item);
         String arg2 = obtenerSegundoElemento(item);
@@ -171,46 +184,85 @@ public class Main {
             array[posicionArg2] = argDecimal;
         }
     }
+
+    /**
+     * calcula (Rxx + Ryy) y almacena el resultado en el registro Rxx;
+     * @param item Corresponde a la instrucción con sus respectivos argumentos.
+     * @param array Arreglo de registros.
+     */
     public static void metodoADD(String item, int[] array) {
-            //Obtiene los argumentos
-            String arg1 = obtenerPrimerElemento(item);
-            String arg2 = obtenerSegundoElemento(item);
+        //Obtiene los argumentos
+        String arg1 = obtenerPrimerElemento(item);
+        String arg2 = obtenerSegundoElemento(item);
 
-            //Los argumentos son posicion del array
-            int posicionArg1 = posicionArray(arg1);
+        //Los argumentos son posicion del array
+        int posicionArg1 = posicionArray(arg1);
 
-            int posicionArg2 = posicionArray(arg2);
+        int posicionArg2 = posicionArray(arg2);
 
-            array[posicionArg1] += array[posicionArg2];
+        array[posicionArg1] += array[posicionArg2];
     }
 
+    /**
+     * Decrementa el valor de un registro específico
+     * @param indexRegistro Indica el índice del registro en el arreglo de los mismos
+     * @param array Arreglo de registros.
+     */
     public static void metodoDEC(int indexRegistro, int[] array){
         array[indexRegistro]--;
     }
 
+    /**
+     * Obtiene el valor numericode de
+     * @param indexRegistro
+     * @param array
+     */
     public static void metodoINV(int indexRegistro, int[] array){
         int valorRegistro=array[indexRegistro];
         //Convertir Int to Binario
         String binario = Integer.toBinaryString(valorRegistro);
         //Invertir Binario
-        binario.replace('0', '2').replace('1', '0').replace('2', '1');
+        String binarioAux= binario.replace('0', '2').replace('1', '0').replace('2', '1');
         //Convertir binario to Int
-        int valorRegistroBinarioInvertido= Integer.parseInt(binario, 2);
+        int valorRegistroBinarioInvertido= Integer.parseInt(binarioAux, 2);
         array[indexRegistro]=valorRegistroBinarioInvertido;
     }
 
+    /**
+     * Método para saltar a la posicion especificada en la instrucción
+     * @param item instruccion actual
+     * @return retorna el indice al que se salta según la instrucción
+     */
     public static int metodoJMP(String item) {
            return obtenerUnicoElemento(item);
     }
-    
-    public static Integer metodoJZ(Integer posicion, int[] registros) {
-        Integer index = 0;
+
+    /**
+     * Salta a la posicion indicada siempre que R00 sea igual a 0
+     * @param posicion Es el número que indica la posicion a saltar
+     * @param registros Es el arreglo de los registros
+     * @param index es el índice de iteración que hace referencia a la posición de las instrucciones
+     * @return el valor de la iteración
+     */
+    public static Integer metodoJZ(Integer posicion, int[] registros,int index) {
         if (registros[0]==0) {
             index = posicion;
-            System.out.println("está iterando!");
+            return index;
         } else {
             index++;
+            return index;
         }
-        return index;
+    }
+
+    /**
+     * Incrementa el valor del registro en 1 unidad, siempre y cuando el valor del registro+1<2^32-1
+     * @param indexRegistro  Índice del array de registro.
+     * @param array Arreglo de registros.
+     */
+    public static void metodoINC(int indexRegistro, int[] array){
+        if(array[indexRegistro]+1==(int)Math.pow(2,32)-1){
+            array[indexRegistro]=0;
+        }
+        array[indexRegistro]++;
     }
 }
