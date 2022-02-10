@@ -8,7 +8,7 @@ public class Main {
         int arraySize;
 
         while (true) {
-            System.out.println("Tamaño del array: ");
+            System.out.println("Tamaño del array: [Número de instrucciones]");
             arraySize = sc.nextInt();
             sc.nextLine();
 
@@ -23,7 +23,7 @@ public class Main {
         String[] subrutina = new String[arraySize];
 
 
-        System.out.println("Instrucciones del array: ");
+        System.out.println("Instrucciones del array --> Ej: MOV 10,R05");
         for (int i = 0; i < subrutina.length; i++) {
             subrutina[i] = sc.nextLine();  //Guardamos cada valor en su posicion
         }
