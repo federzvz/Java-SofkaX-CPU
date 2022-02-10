@@ -7,9 +7,18 @@ public class Main {
 
         int arraySize;
 
-        System.out.println("Tamaño del array: ");
-        arraySize = sc.nextInt();
-        sc.nextLine();
+        while (true) {
+            System.out.println("Tamaño del array: ");
+            arraySize = sc.nextInt();
+            sc.nextLine();
+
+            if (arraySize > 1024) {
+                System.out.println("Tamaño del array muy grande! vuelve a ingresar\n");
+                continue;
+            } else {
+                break;
+            }
+        }
 
         String[] subrutina = new String[arraySize];
 
@@ -65,7 +74,8 @@ public class Main {
                     break;
             }
         }
-        System.out.print(array[42]);
+        
+        System.out.println("\nResultado: R42 --> " + array[42]);
         System.out.println("\nEquipo más pro!");
         
     }
