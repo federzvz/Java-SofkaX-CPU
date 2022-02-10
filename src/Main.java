@@ -2,30 +2,31 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner keyScanner = new Scanner(System.in);
-        String[] subrutina;
-        ArrayList<String> ar = new ArrayList<String>();
-        while(true){
-            System.out.print("$Usuario> ");
+        
+        Scanner sc = new Scanner(System.in);
 
-            String instruccion = keyScanner.nextLine();
-            subrutina.push(instruccion);
-            if(subrutina.length()>1024){
-                System.out.print("Ha excedido la cantidad de comandos permitdos.");
-                break;
-            }
-            else{
-                procesarInstrucciones(subrutina);
-            }
+        int arraySize;
+
+        System.out.println("Tamaño del array: ");
+        arraySize = sc.nextInt();
+        sc.nextLine();
+
+        String[] subrutina = new String[arraySize];
+
+
+        System.out.println("Instrucciones del array: ");
+        for (int i = 0; i < subrutina.length; i++) {
+            subrutina[i] = sc.nextLine();  //Guardamos cada valor en su posicion
         }
+        //System.out.println(subrutina[1]);
             //String[] subrutina = {"MOV 5,R00", "MOV 10,R01", "JZ 7", "ADD R02,R01", "DEC R00", "JMP 3", "MOV R02,R42"};
-            //String[] subrutina = {"NOP","MOV 45,R42", "DEC R42", "INV R42", ""};
-            //procesarInstrucciones(subrutina);
+            //String[] subrutina = {"NOP","MOV 45,R42", "DEC R42", "INV R42"};
+        procesarInstrucciones(subrutina);
     }
 
     /**
-     *
-     * @param instrucciones
+     * Método que ejecuta el proceso de leer las instrucciones
+     * @param instrucciones arreglo que contiene las instrucciones en cadena de texto
      */
     public static void procesarInstrucciones(String[] instrucciones){
         int[] array = new int[43];
@@ -65,6 +66,8 @@ public class Main {
             }
         }
         System.out.print(array[42]);
+        System.out.println("\nEquipo más pro!");
+        
     }
 
     /**
